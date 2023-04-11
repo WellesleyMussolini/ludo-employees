@@ -45,17 +45,12 @@ export const Box = styled.div`
 `;
 
 export const EmployeeType = styled.div`
-    /* display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    width: 100%;
-    */
-    margin: 0 40px; 
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
     flex-direction: row;
     gap: 15px;
-    justify-content: space-between;
+    margin: 0 40px; 
     & > p{
         text-align: left;
         font-weight: bolder;
@@ -66,11 +61,26 @@ export const InputName = styled.input`
     padding-left: 5px;
     padding: 8px;
     width: 250px;
-`; 
+`;
 
 export const CreateEmployee = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 10px;
+`;
+
+export const EmployeeFunction = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    & > p{
+        text-align: left;
+        font-weight: bolder;
+    }
+    & > select{
+        padding-left: 5px;
+        padding: 8px;
+        width: 150px;
+    }
 `;

@@ -1,12 +1,18 @@
 import React from "react";
-import { Container, Employees } from "./header.styles";
-import Logo from "./img/ludocafe.png";
+import { Container, Logo, Employees, Image } from "./header.styles";
+import LudoCafe from "./img/ludocafe.png";
+import Chef from "./img/chef.png";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
-    return(
+const Header = ({}) => {
+    const navigate = useNavigate();
+    return (
         <Container>
+            <Logo>
+                <Image src={LudoCafe} alt="LudoCafé" onClick={() => navigate("/")} />
+            </Logo>
             <Employees>
-                <img src={Logo} alt="logo" />
+                <Image src={Chef} alt="Employee" width="4em" onClick={() => navigate("/funcionarios")} />
             </Employees>
         </Container>
     )
