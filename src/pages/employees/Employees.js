@@ -4,6 +4,7 @@ import Modal from "../../components/modal/Modal";
 import Button from "../../components/button/Button";
 import { useContextEmployee } from "../../context/employees";
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -36,6 +37,7 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const addEmployee = () => {
     if (!employeeName || !employeeJobRole) return;
     const newEmployee = {
+      id: new Date().getTime(),
       name: employeeName,
       hired: employeeHired,
       jobRole: employeeJobRole,
@@ -69,12 +71,11 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const [buttonLabel, setButtonLabel] = useState("");
 
 
-  const removeEmployee = (employeeIndex) => {
-    const newEmployees = employees.filter((_, index) => index !== employeeIndex);
+  const removeEmployee = (employeeId) => {
+    const newEmployees = employees.filter((employee) => employee.id !== employeeId);
     setEmployees(newEmployees);
-    localStorage.setItem('employees', JSON.stringify(newEmployees));
+    localStorage.setItem("employees", JSON.stringify(newEmployees));
   };
-
 
   return (
     <Container>
@@ -111,9 +112,10 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
                 <h2>ATENDIMENTO</h2>
                 <p>{employee.name}</p>
                 <EditIcon onClick={() => {
-                  setEditingEmployeeIndex(index);
+                  setEditingEmployeeIndex(employee.id);
                   setOpenModal(true);
                 }} />
+                <DeleteIcon onClick={() => removeEmployee(employee.id)} />
               </li>
             )
           })}
@@ -125,10 +127,10 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
                 <h2>COZINHA</h2>
                 <p>{employee.name}</p>
                 <EditIcon onClick={() => {
-                  setEditingEmployeeIndex(index);
+                  setEditingEmployeeIndex(employee.id);
                   setOpenModal(true);
                 }} />
-                <button onClick={() => removeEmployee(index)}>REMOVER</button>
+                <DeleteIcon onClick={() => removeEmployee(employee.id)} />
               </li>
             )
           })}
@@ -144,10 +146,10 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
                 <h2>ATENDIMENTO</h2>
                 <p>{employee.name}</p>
                 <EditIcon onClick={() => {
-                  setEditingEmployeeIndex(index);
+                  setEditingEmployeeIndex(employee.id);
                   setOpenModal(true);
-                  <button onClick={() => removeEmployee(index)}>REMOVER</button>
                 }} />
+                <DeleteIcon onClick={() => removeEmployee(employee.id)} />
               </li>
             )
           })}
@@ -159,9 +161,10 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
                 <h2>COZINHA</h2>
                 <p>{employee.name}</p>
                 <EditIcon onClick={() => {
-                  setEditingEmployeeIndex(index);
+                  setEditingEmployeeIndex(employee.id);
                   setOpenModal(true);
                 }} />
+                <DeleteIcon onClick={() => removeEmployee(employee.id)} />
               </li>
             )
           })}
