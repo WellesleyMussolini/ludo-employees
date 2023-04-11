@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, CreateEmployee, EmployeeList, FreeLancer, Hired, JobRole, Kitchen, RolesTitle, Waiters } from "./employees.styles";
+import { Container, CreateEmployee, EmployeeList, FreeLancer, Hired } from "./employees.styles";
 import Modal from "../../components/modal/Modal";
 import Button from "../../components/button/Button";
+import { useContextEmployee } from "../../context/employees";
 
 const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [employees, setEmployees] = useState([]);
+  // const [employees, setEmployees] = useState([]);
+  const { employees, setEmployees } = useContextEmployee();
   console.log(employees)
 
   const [employeeName, setEmployeeName] = useState(employeeNameProp || '');
@@ -13,7 +15,7 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const [employeeJobRole, setEmployeeJobRole] = useState(employeeJobRoleProp || "ATENDIMENTO");
 
   useEffect(() => {
-    const savedEmployees = JSON.parse(localStorage.getItem("LudoCafé"));
+    const savedEmployees = JSON.parse(localStorage.getItem("employees"));
     if (savedEmployees) {
       setEmployees(savedEmployees);
     }
