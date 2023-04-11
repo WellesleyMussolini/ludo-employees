@@ -3,6 +3,7 @@ import { Container, CreateEmployee, EmployeeList, FreeLancer, Hired } from "./em
 import Modal from "../../components/modal/Modal";
 import Button from "../../components/button/Button";
 import { useContextEmployee } from "../../context/employees";
+import EditIcon from '@mui/icons-material/Edit';
 
 const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -12,13 +13,25 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const [employeeName, setEmployeeName] = useState(employeeNameProp || '');
   const [employeeHired, setEmployeeHired] = useState(false);
   const [employeeJobRole, setEmployeeJobRole] = useState(employeeJobRoleProp || "ATENDIMENTO");
+  const [editingEmployeeIndex, setEditingEmployeeIndex] = useState(null);
 
   useEffect(() => {
     const savedEmployees = JSON.parse(localStorage.getItem("employees"));
     if (savedEmployees) {
       setEmployees(savedEmployees);
     }
-  }, []);
+    if (editingEmployeeIndex !== null) {
+      setEmployeeName(employees[editingEmployeeIndex].name);
+      setEmployeeHired(employees[editingEmployeeIndex].hired);
+      setEmployeeJobRole(employees[editingEmployeeIndex].jobRole);
+    }
+
+    setButtonLabel(
+      editingEmployeeIndex !== null && editingEmployeeIndex >= 0
+        ? "EDITAR FUNCIONÁRIO"
+        : "ADICIONAR FUNCIONÁRIO"
+    );
+  }, [employeeNameProp, editingEmployeeIndex]);
 
   const addEmployee = () => {
     if (!employeeName || !employeeJobRole) return;
@@ -27,13 +40,21 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
       hired: employeeHired,
       jobRole: employeeJobRole,
     };
-    const newEmployees = [...employees, newEmployee];
+    let newEmployees = [...employees];
+    if (editingEmployeeIndex !== null) {
+      newEmployees[editingEmployeeIndex] = newEmployee;
+      setEditingEmployeeIndex(null);
+    } else {
+      newEmployees.push(newEmployee);
+    }
     setEmployees(newEmployees);
     setEmployeeName("");
     setEmployeeJobRole("ATENDIMENTO");
     setEmployeeHired(false);
     localStorage.setItem('employees', JSON.stringify(newEmployees));
+    setOpenModal(false);
   };
+
 
   const handleHireChange = (event) => {
     const value = event.target.value === 'true';
@@ -44,6 +65,16 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
     const value = event.target.value;
     setEmployeeJobRole(value);
   };
+
+  const [buttonLabel, setButtonLabel] = useState("");
+
+
+  const removeEmployee = (employeeIndex) => {
+    const newEmployees = employees.filter((_, index) => index !== employeeIndex);
+    setEmployees(newEmployees);
+    localStorage.setItem('employees', JSON.stringify(newEmployees));
+  };
+
 
   return (
     <Container>
@@ -66,27 +97,38 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
         handleHireChange={handleHireChange}
         handleEmployeeJobRole={handleEmployeeJobRole}
         employeeJobRole={employeeJobRole}
+        buttonName={buttonLabel}
+        editingEmployee={editingEmployeeIndex !== null ? employees[editingEmployeeIndex] : null}
       />
       <EmployeeList>
         <Hired>
           <h1>CONTRATADOS</h1>
           {employees.filter(employee => {
             return employee.hired === true && employee.jobRole === "ATENDIMENTO";
-          }).map(employee => {
+          }).map((employee, index) => {
             return (
               <li>
                 <h2>ATENDIMENTO</h2>
                 <p>{employee.name}</p>
+                <EditIcon onClick={() => {
+                  setEditingEmployeeIndex(index);
+                  setOpenModal(true);
+                }} />
               </li>
             )
           })}
           {employees.filter(employee => {
             return employee.hired === true && employee.jobRole === "COZINHA";
-          }).map(employee => {
+          }).map((employee, index) => {
             return (
               <li>
                 <h2>COZINHA</h2>
                 <p>{employee.name}</p>
+                <EditIcon onClick={() => {
+                  setEditingEmployeeIndex(index);
+                  setOpenModal(true);
+                }} />
+                <button onClick={() => removeEmployee(index)}>REMOVER</button>
               </li>
             )
           })}
@@ -96,21 +138,30 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
           <h1>FREE LANCERS</h1>
           {employees.filter(employee => {
             return employee.hired === false && employee.jobRole === "ATENDIMENTO";
-          }).map(employee => {
+          }).map((employee, index) => {
             return (
               <li>
                 <h2>ATENDIMENTO</h2>
                 <p>{employee.name}</p>
+                <EditIcon onClick={() => {
+                  setEditingEmployeeIndex(index);
+                  setOpenModal(true);
+                  <button onClick={() => removeEmployee(index)}>REMOVER</button>
+                }} />
               </li>
             )
           })}
           {employees.filter(employee => {
             return employee.hired === false && employee.jobRole === "COZINHA";
-          }).map(employee => {
+          }).map((employee, index) => {
             return (
               <li>
                 <h2>COZINHA</h2>
                 <p>{employee.name}</p>
+                <EditIcon onClick={() => {
+                  setEditingEmployeeIndex(index);
+                  setOpenModal(true);
+                }} />
               </li>
             )
           })}
@@ -119,16 +170,5 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
     </Container>
   );
 }
+
 export default Employees;
-
-
-
-// {employees.filter(employee => {
-//   return employee.hired === true && employee.jobRole === "ATENDIMENTO";
-// }).map(employee => {
-//   return (
-//     <li>
-//       <p>{employee.name}</p>
-//     </li>
-//   )
-// })}

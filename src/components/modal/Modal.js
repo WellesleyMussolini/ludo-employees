@@ -19,6 +19,7 @@ const Modal = ({
   handleHireChange,
   handleEmployeeJobRole,
   employeeJobRole,
+  buttonName
 }) => {
   const [employeeType, setEmployeeType] = useState(false);
 
@@ -60,7 +61,7 @@ const Modal = ({
           </EmployeeType>
           <CreateEmployee>
             <Button
-              text="CRIAR FUNCIONÁRIO"
+              text={buttonName}
               handleOnClick={handleCreateEmployee}
               backgroundColor="rgb(38, 153, 57)"
               fontSize="8px"
@@ -74,6 +75,5 @@ const Modal = ({
     </Overlay>
   );
 };
-
 
 export default Modal;

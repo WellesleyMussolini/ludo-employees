@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, WeekDays, Workers } from "./weekscales.styles";
+import { useContextEmployee } from "../../context/employees";
 
 const WeekScales = ({ children }) => {
+    const {employees, setEmployees} = useContextEmployee();
     return (
         <Container>
             <WeekDays>
@@ -28,8 +30,16 @@ const WeekScales = ({ children }) => {
                 </div>
             </WeekDays>
             <Workers>
-                <div></div>
-                <div></div>
+                <div><h1>NINGUÉM TRABALHA</h1></div>
+                <div>
+                    {
+                        <select>
+                            {employees.map((employee, index) => (
+                                <option key={index}>{employee.name}</option>
+                            ))}
+                        </select>
+                    }
+                </div>
                 <div></div>
                 <div></div>
                 <div></div>
