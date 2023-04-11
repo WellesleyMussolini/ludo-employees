@@ -6,7 +6,6 @@ import { useContextEmployee } from "../../context/employees";
 
 const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
   const [openModal, setOpenModal] = useState(false);
-  // const [employees, setEmployees] = useState([]);
   const { employees, setEmployees } = useContextEmployee();
   console.log(employees)
 
