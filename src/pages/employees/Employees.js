@@ -88,6 +88,14 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
           height="40px"
         />
       </CreateEmployee>
+      <EmployeeList>
+        <EmployeesClass
+          employees={employees}
+          setEditingEmployeeIndex={setEditingEmployeeIndex}
+          setOpenModal={setOpenModal}
+          removeEmployee={removeEmployee}
+        />
+      </EmployeeList>
       <Modal
         open={openModal}
         close={() => setOpenModal(false)}
@@ -100,16 +108,6 @@ const Employees = ({ employeeNameProp, employeeJobRoleProp }) => {
         buttonName={buttonLabel}
         editingEmployee={editingEmployeeIndex !== null ? employees[editingEmployeeIndex] : null}
       />
-
-      <EmployeeList>
-        <EmployeesClass
-          employees={employees}
-          setEditingEmployeeIndex={setEditingEmployeeIndex}
-          setOpenModal={setOpenModal}
-          removeEmployee={removeEmployee}
-        />
-      </EmployeeList>
-
     </Container>
   );
 }

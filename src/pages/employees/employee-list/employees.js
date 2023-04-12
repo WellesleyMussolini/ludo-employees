@@ -1,7 +1,7 @@
 import React from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Container, FreeLancerList, HiredList } from "./employees.styles";
+import { FreeLancerList, HiredList } from "./employees.styles";
 
 const EmployeeList = ({ employees, hired, jobRole, setEditingEmployeeIndex, setOpenModal, removeEmployee }) => {
     const filteredEmployees = employees.filter((employee) => {
