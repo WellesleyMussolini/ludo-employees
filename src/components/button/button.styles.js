@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const Container = styled.button`
-    position: ${(props) => props.position};
-    top: ${(props) => props.top};
-    left: ${(props) => props.left};
+    position: ${props => props.position};
+    top: 150px;
+    left: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
