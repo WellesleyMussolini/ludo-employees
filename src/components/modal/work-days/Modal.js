@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { employees } from "../../../services/service";
 import { Overlay, Wrapper, Staff, Box, WeekDays, CheckBox, SelectEmployee } from "./modal.styles";
@@ -5,7 +6,7 @@ import { week_days } from "../../mock/week.mock";
 import Button from "../../button/Button";
 import CloseIcon from "@mui/icons-material/Close";
 
-const Modal = ({ open, close, HandleSubmit, HandleStaffer, staffer }) => {
+const Modal = ({ open, close, HandleSubmit, HandleStaffer, staffer, checkbox, HandleCheckbox }) => {
     const { data: staff } = useQuery("staff", employees.get);
     return (
         <Overlay open={open}>
@@ -15,7 +16,14 @@ const Modal = ({ open, close, HandleSubmit, HandleStaffer, staffer }) => {
                     <CloseIcon onClick={close} />
                     <SelectEmployee>
                         <h2>SELECIONE O FUNCIONARIO</h2>
-                        <Staff onChange={(event) => HandleStaffer(event.target.value)}>{staff.map(((employee, index) => <option key={index} value={staffer}>{employee.name}</option>))}</Staff>
+                        <Staff onChange={(event) => HandleStaffer(event.target.value)}>
+                            <option value="">SELECIONE UM FUNCIONÁRIO</option>
+                            {staff.map((employee, index) => (
+                                <option key={index} value={employee.name}>
+                                    {employee.name}
+                                </option>
+                            ))}
+                        </Staff>
                     </SelectEmployee>
                     <Box>
                         <h2>DIAS QUE IRÁ TRABALHAR</h2>
@@ -26,6 +34,8 @@ const Modal = ({ open, close, HandleSubmit, HandleStaffer, staffer }) => {
                                         <CheckBox key={index}>
                                             <input
                                                 type="checkbox"
+                                                checked={checkbox[day.week_day] || false}
+                                                onChange={(e) => HandleCheckbox(day.week_day, e.target.checked)}
                                             />
                                             <p>{day.week_day}</p>
                                         </CheckBox>
@@ -49,4 +59,3 @@ const Modal = ({ open, close, HandleSubmit, HandleStaffer, staffer }) => {
 };
 
 export default Modal;
-

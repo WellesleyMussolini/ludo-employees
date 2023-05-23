@@ -51,7 +51,7 @@ export const Staff = styled.select`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
+    width: 100%;
     text-align: center;
     height: 40px;
     border-radius: 0;
