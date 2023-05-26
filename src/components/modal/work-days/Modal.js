@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useQuery } from "react-query";
-import { employees } from "../../../services/service";
+import { employees } from "../../../services/employees-service";
 import { Overlay, Wrapper, Staff, Box, WeekDays, CheckBox, SelectEmployee } from "./modal.styles";
 import { week_days } from "../../mock/week.mock";
 import Button from "../../button/Button";
 import CloseIcon from "@mui/icons-material/Close";
 
-const Modal = ({ open, close, HandleSubmit, HandleStaffer, staffer, checkbox, HandleCheckbox }) => {
+const Modal = ({ open, close, HandleSubmit, HandleStaffer, checkbox, HandleCheckbox }) => {
     const { data: staff } = useQuery("staff", employees.get);
     return (
         <Overlay open={open}>
