@@ -1,4 +1,2 @@
-/node_modules
-CODIGO-CORRETO.JS
-.gitignore
-CODIGO-CSS-CORRETO.css
+node_modules
+.env
