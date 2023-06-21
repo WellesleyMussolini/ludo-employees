@@ -11,9 +11,9 @@ const Header = () => {
             <Logo>
                 <Image src={LudoCafe} alt="LudoCafé" onClick={() => navigate("/")} />
             </Logo>
-            <Employees>
+            {/* <Employees>
                 <Image src={Chef} alt="Employee" width="4em" onClick={() => navigate("/funcionarios")} />
-            </Employees>
+            </Employees> */}
         </Container>
     )
 };
