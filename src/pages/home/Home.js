@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { schedule } from '../../services/requests';
-import { Container } from './home.styles';
+import { Container, WeekDays } from './home.styles';
 import Modal from '../../components/modal/Modal';
 import WeekSchedule from './components/weekSchedule';
 import { getSelectedDaysToAdd } from './utils/selectedDays';
 import { toggleCheckbox } from './utils/toggleCheckbox';
+import { getWeekDates } from './utils/weekdays';
 
 const Home = () => {
     const [weekStartDate, setWeekStartDate] = useState(moment().startOf('isoWeek'));
@@ -34,30 +35,26 @@ const Home = () => {
 
     useEffect(() => {
         const startDate = weekStartDate.clone();
-        const dates = [];
-
-        for (let i = 0; i < 7; i++) {
-            dates.push(startDate.clone());
-            startDate.add(1, 'day');
-        }
-
+        const dates = getWeekDates(startDate);
         setWeekDates(dates);
 
-        schedule.get().then((schedules) => {
-            const updatedSelectedDays = {
-                Monday: [],
-                Tuesday: [],
-                Wednesday: [],
-                Thursday: [],
-                Friday: [],
-                Saturday: [],
-                Sunday: []
-            };
-            schedules.forEach((schedule) => updatedSelectedDays[schedule.weekday].push(schedule));
-            setSelectedDays(updatedSelectedDays);
-        }).catch((error) => {
-            console.error('Failed to fetch schedules:', error);
-        });
+        schedule.get()
+            .then((schedules) => {
+                const updatedSelectedDays = {
+                    Monday: [],
+                    Tuesday: [],
+                    Wednesday: [],
+                    Thursday: [],
+                    Friday: [],
+                    Saturday: [],
+                    Sunday: []
+                };
+                schedules.forEach((schedule) => updatedSelectedDays[schedule.weekday].push(schedule));
+                setSelectedDays(updatedSelectedDays);
+            })
+            .catch((error) => {
+                console.error('Failed to fetch schedules:', error);
+            });
     }, [weekStartDate]);
 
     const handleCheckboxChange = (day) => setSelectedCheckboxes((prevSelectedCheckboxes) => toggleCheckbox(day, prevSelectedCheckboxes));
@@ -65,24 +62,31 @@ const Home = () => {
     const handleInputChange = (event) => setTextInput(event.target.value);
 
     const handleAdd = async () => {
-        const selectedDaysToAdd = getSelectedDaysToAdd(selectedCheckboxes)
+        const selectedDaysToAdd = getSelectedDaysToAdd(selectedCheckboxes);
+        const hasSelectedCheckbox = Object.values(selectedCheckboxes).some(checkbox => checkbox);
+
+        if (!hasSelectedCheckbox) {
+            alert('Selecione pelo menos um dia da semana.');
+            return;
+        };
+        if (textInput.length > 20) {
+            alert("Envie no máximo 20 caracteres!");
+            return;
+        };
         try {
             for (const day of selectedDaysToAdd) {
                 const newSchedule = await schedule.create({
                     weekday: day,
                     name: textInput,
                 });
-
                 setSelectedDays((prevSelectedDays) => ({
                     ...prevSelectedDays,
                     [day]: [...prevSelectedDays[day], newSchedule],
                 }));
-            }
-
-            setTextInput('');
-            setShowModal(false);
+            };
+            reset();
         } catch (error) {
-            console.error('Failed to create schedule:', error);
+            console.error('Failed to create schedule');
         }
     };
 
@@ -108,31 +112,38 @@ const Home = () => {
         }
     };
 
+    const reset = () => {
+        setSelectedCheckboxes({
+            Monday: false,
+            Tuesday: false,
+            Wednesday: false,
+            Thursday: false,
+            Friday: false,
+            Saturday: false,
+            Sunday: false
+        });
+        setTextInput("");
+        setShowModal(false);
+    };
+
     return (
         <Container>
-            {weekDates.map((date) => (
-                <WeekSchedule
-                    key={date.format('YYYY-MM-DD')}
-                    date={date}
-                    selectedDays={selectedDays}
-                    handleRemoveEmployee={handleRemoveEmployee}
-                />
-            ))}
-
-            <button onClick={() => setWeekStartDate(weekStartDate.clone().add(1, 'week'))}>
-                Próxima Semana
-            </button>
-
-            <button onClick={() => setWeekStartDate(weekStartDate.clone().subtract(1, 'week'))}>
-                Semana Anterior
-            </button>
-
-            <button onClick={() => setShowModal(true)}>Abrir Modal</button>
+            <WeekDays>
+                {weekDates.map((date) => (
+                    <WeekSchedule
+                        key={date.format('YYYY-MM-DD')}
+                        date={date}
+                        selectedDays={selectedDays}
+                        handleRemoveEmployee={handleRemoveEmployee}
+                    />
+                ))}
+            </WeekDays>
+            <button onClick={() => setShowModal(true)}>ADICIONAR</button>
 
             {showModal && (
                 <Modal
                     open={showModal}
-                    close={() => setShowModal(false)}
+                    close={reset}
                     selectedDays={selectedDays}
                     selectedCheckboxes={selectedCheckboxes}
                     handleCheckboxChange={handleCheckboxChange}

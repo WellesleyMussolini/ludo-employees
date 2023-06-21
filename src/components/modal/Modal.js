@@ -1,3 +1,6 @@
+import { CheckBoxes, CloseIcon, Container, WeekDaysOptions, Wrapper } from "./modal.styles";
+import { AiOutlineClose } from 'react-icons/ai';
+
 const Modal = ({
     open,
     selectedCheckboxes,
@@ -7,34 +10,28 @@ const Modal = ({
     handleAdd,
     close
 }) => {
-    if (!open) {
-        return null;
-    }
-
-    const handleClose = () => {
-        close();
-    };
-
+    if (!open) return null;
     return (
-        <>
-            <button onClick={handleClose}>CLOSE</button>
-            <input type="text" value={textInput} onChange={handleInputChange} />
+        <Container>
+            <Wrapper>
+                <CloseIcon onClick={close} />
+                <input placeholder="Digite um nome" type="text" value={textInput} onChange={handleInputChange} />
 
-            {Object.entries(selectedCheckboxes).map(([day, isSelected]) => (
-                <div key={day}>
-                    <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => handleCheckboxChange(day)}
-                    />
-                    <label>{day}</label>
-                </div>
-            ))}
-
-            <button onClick={handleAdd} disabled={!textInput}>
-                Adicionar
-            </button>
-        </>
+            <WeekDaysOptions>
+                {Object.entries(selectedCheckboxes).map(([day, isSelected]) => (
+                    <CheckBoxes key={day}>
+                        <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleCheckboxChange(day)}
+                            />
+                        <p>{day}</p>
+                    </CheckBoxes>
+                ))}
+                </WeekDaysOptions>
+                <button onClick={handleAdd} disabled={!textInput}>ADICIONAR</button>
+            </Wrapper>
+        </Container>
     );
 };
 

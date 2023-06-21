@@ -1,12 +1,15 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import { FiTrash2 } from 'react-icons/fi';
 
 export const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 80px);
     flex-direction: column;
+    border-right: 1px solid black;
+    &:last-child{
+        border-right: none;
+    };
 `;
 
 export const WeekDay = styled.ul`
@@ -14,15 +17,30 @@ export const WeekDay = styled.ul`
     justify-content: center;
     align-items: center; 
     flex-direction: column;
-    width: 10em;
-    gap: 15px;
+    width: 12em;
+    height: 20em;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
 `;
 
 export const Employee = styled.li`
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 80%;
     flex-direction: row;
+
+    & > li {
+        margin-bottom: 15px; /* Adiciona margem inferior para criar espaçamento */
+    }
+    
+    & > li:last-child {
+        margin-bottom: 0; /* Remove a margem inferior do último elemento */
+    }
+
+    & > p {
+        font-size: 1.1em;
+    }
 `;
 
 export const TrashIcon = styled(FiTrash2)`
