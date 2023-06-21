@@ -71,6 +71,7 @@ export const WeekDaysOptions = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     height: 7em;
+    gap: 15px;
 `;
 
 export const CheckBoxes = styled.div`

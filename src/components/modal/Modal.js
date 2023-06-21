@@ -10,6 +10,16 @@ const Modal = ({
     handleAdd,
     close
 }) => {
+    const weekdaysPt = {
+        Monday: 'Segunda',
+        Tuesday: 'Terça',
+        Wednesday: 'Quarta',
+        Thursday: 'Quinta',
+        Friday: 'Sexta',
+        Saturday: 'Sábado',
+        Sunday: 'Domingo',
+    };
+
     if (!open) return null;
     return (
         <Container>
@@ -17,17 +27,17 @@ const Modal = ({
                 <CloseIcon onClick={close} />
                 <input placeholder="Digite um nome" type="text" value={textInput} onChange={handleInputChange} />
 
-            <WeekDaysOptions>
-                {Object.entries(selectedCheckboxes).map(([day, isSelected]) => (
-                    <CheckBoxes key={day}>
-                        <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() => handleCheckboxChange(day)}
+                <WeekDaysOptions>
+                    {Object.entries(selectedCheckboxes).map(([day, isSelected]) => (
+                        <CheckBoxes key={day}>
+                            <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => handleCheckboxChange(day)}
                             />
-                        <p>{day}</p>
-                    </CheckBoxes>
-                ))}
+                            <p>{weekdaysPt[day]}</p>
+                        </CheckBoxes>
+                    ))}
                 </WeekDaysOptions>
                 <button onClick={handleAdd} disabled={!textInput}>ADICIONAR</button>
             </Wrapper>
